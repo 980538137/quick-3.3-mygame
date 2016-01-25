@@ -8,7 +8,7 @@
 #endif
 #include "ConfigParser.h"
 #include "lua_module_register.h"
-
+#include "pbc-lua.h"
 
 // extra lua module
 #include "cocos2dx_extra.h"
@@ -86,6 +86,15 @@ void AppDelegate::initGLContextAttrs()
     GLView::setGLContextAttrs(glContextAttrs);
 }
 
+static int bsReadFile(lua_State *L)
+{
+    const char *buff = luaL_checkstring(L, -1);
+    Data data = FileUtils::getInstance()->getDataFromFile(buff);
+    lua_pushlstring(L, (const char*)data.getBytes(), data.getSize());
+    return 1;
+    
+}
+
 bool AppDelegate::applicationDidFinishLaunching()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
@@ -119,7 +128,11 @@ bool AppDelegate::applicationDidFinishLaunching()
     ScriptEngineManager::getInstance()->setScriptEngine(engine);
     lua_State* L = engine->getLuaStack()->getLuaState();
     lua_module_register(L);
-
+    luaopen_protobuf_c(L);
+    
+    //解决android中无法读取到.pb文件的问题
+    lua_register(L, "bsReadFile", bsReadFile);
+    
     // use Quick-Cocos2d-X
     quick_module_register(L);
 
