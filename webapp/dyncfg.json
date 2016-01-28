@@ -1,0 +1,12 @@
+{
+	"code":0,
+	"lastupdate":20151221,
+	"hostinfo":
+	{
+		"loginseedhost":"https://passport.wcygame.com/login/gameseed",
+		"logingamehost":"https://passport.wcygame.com/login/gamelogin",
+		"registerhost":"https://passport.wcygame.com/mobile"
+	},
+	"serverstate":"1"
+
+}

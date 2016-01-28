@@ -13,9 +13,9 @@ function MyApp:run()
     cc.FileUtils:getInstance():addSearchPath("res/")
     cc.FileUtils:getInstance():addSearchPath("src/")
     --cc.LuaLoadChunksFromZIP("game.zip")
-    self:enterScene("MainScene")
-    --local updateLayer = require("app.update.UpdateLayer").new()
-    --display.replaceScene(updateLayer)
+    -- self:enterScene("MainScene")
+    local updateLayer = require("app.update.UpdateLayer").new()
+    display.replaceScene(updateLayer)
 end
 
 return MyApp

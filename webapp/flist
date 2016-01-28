@@ -1,0 +1,10 @@
+local list = {
+	ver = "1.0.2",
+	stage = {
+		{name="update.bin", code="", act="load"}
+	},
+	remove = {
+
+	},
+}
+return list

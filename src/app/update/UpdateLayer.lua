@@ -14,44 +14,44 @@ function UpdateLayer:ctor()
 	
 
 	-- --LoadingBar
-	-- local updateProgress = node:getChildByName("UpdateProgress")
-	-- -- local updateProgress = ccui.Helper:seekWidgetByName(node, "UpdateProgress")
-	-- updateProgress:setPercent(50)
+	self.updateProgress = node:getChildByName("update_progress")
+	-- local updateProgress = ccui.Helper:seekWidgetByName(node, "UpdateProgress")
+	self.updateProgress:setPercent(50)
 
-	-- local function touchEvent(sender,eventType)
- --        if eventType == ccui.TouchEventType.began then
+	local function touchEvent(sender,eventType)
+        if eventType == ccui.TouchEventType.began then
 
- --        elseif eventType == ccui.TouchEventType.moved then
+        elseif eventType == ccui.TouchEventType.moved then
 
- --        elseif eventType == ccui.TouchEventType.ended then
- --            printf("Touch Down")
+        elseif eventType == ccui.TouchEventType.ended then
+            printf("Touch Down")
  
 
- --            -- self:download()
- --            -- self:enterGame()
- --            cc.LuaLoadChunksFromZIP("game.zip")
- --        elseif eventType == ccui.TouchEventType.canceled then
+            self:download()
+            -- self:enterGame()
+            -- cc.LuaLoadChunksFromZIP("game.zip")
+        elseif eventType == ccui.TouchEventType.canceled then
 
- --        end
- --    end
- --    local login = node:getChildByName("LoginButton")
- --    -- local login = ccui.Helper:seekWidgetByName(node, "EnterButton")
- --    login:addTouchEventListener(touchEvent)
+        end
+    end
+    local login = node:getChildByName("btn_download")
+    -- local login = ccui.Helper:seekWidgetByName(node, "EnterButton")
+    login:addTouchEventListener(touchEvent)
 
- --    local function onEnterGame(sender,eventType)
- --        if eventType == ccui.TouchEventType.began then
+    local function onEnterGame(sender,eventType)
+        if eventType == ccui.TouchEventType.began then
 
- --        elseif eventType == ccui.TouchEventType.moved then
+        elseif eventType == ccui.TouchEventType.moved then
 
- --        elseif eventType == ccui.TouchEventType.ended then
- --            self:enterGame()
- --        elseif eventType == ccui.TouchEventType.canceled then
+        elseif eventType == ccui.TouchEventType.ended then
+            self:enterGame()
+        elseif eventType == ccui.TouchEventType.canceled then
 
- --        end
- --    end
+        end
+    end
 
- --    local enterGame = node:getChildByName("EnterGameButton")
- --    enterGame:addTouchEventListener(onEnterGame)
+    local btn_entergame = node:getChildByName("btn_entergame")
+    btn_entergame:addTouchEventListener(onEnterGame)
 end
 
 function UpdateLayer:onEnter()
@@ -61,6 +61,10 @@ end
 
 function UpdateLayer:onExit()
 	printf("UpdateLayer onExit")
+end
+
+function UpdateLayer:checkUpdate()
+    
 end
 
 function UpdateLayer:checkVersion()
@@ -131,17 +135,21 @@ function UpdateLayer:download()
         --请求成功
         local response = request:getResponseString()
 
-        local path = "/Users/liming/Documents/src.zip"
-        printf("Dwn Path:%s",path)
-        local fp = io.open(path,"w")
-        if fp then
-            fp:write(response)
-            fp:close()
-        end
-        
+        -- local path = "/Users/liming/Documents/src.zip"
+        local path = device.writablePath.."update.zip";
+        -- printf("Dwn Path:%s",path)
+        -- local fp = io.open(path,"w")
+        -- if fp then
+        --     fp:write(response)
+        --     fp:close()
+        -- end
+
+        request:saveResponseData(path)
+        cc.LuaLoadChunksFromZIP(path)
         
     end
-    local url = "http://127.0.0.1:8080/download?filename=src.zip"
+    local url = "http://127.0.0.1:8080/download?filename=update.zip"
+    -- local url = "http://cdn.wcygame.com/AppApk/Pack324All2016-01-26-03.zip"
     local request = network.createHTTPRequest(onRequestFinished, url, "GET")
     --开始请求
     request:start()
