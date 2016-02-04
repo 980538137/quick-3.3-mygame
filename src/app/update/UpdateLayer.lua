@@ -4,7 +4,7 @@ end)
 
 function UpdateLayer:ctor()
 
-    local node = cc.CSLoader:createNode("MainScene.csb")
+    local node = cc.CSLoader:createNode("UpdateScene.csb")
     self:addChild(node)
     
     cc.ui.UILabel.new({
@@ -101,6 +101,29 @@ function UpdateLayer:checkVersion()
                     --进入下载页面
                 else
                     --增量更新
+                    local filelist_url
+                    local app_version
+                    local script_version
+                    local request = network.createHTTPRequest(function(event)
+                        local ok = (event.name == "completed")
+                        local request = event.request
+                        if not ok then
+                            --请求失败，显示错误代码和错误信息
+                            print(request:getErrorCode(), request:getErrorMessage())
+                            return
+                        end
+
+                        local code = request:getResponseStatusCode()
+                        if code ~= 200 then
+                            -- 请求结束，但没有返回 200 响应代码
+                            print("failed"..code)
+                            return
+                        end
+                        local response = request.getResponseData()
+                        
+
+                    end,filelist_url,"GET")
+                    request:start()
                 end
             else
                 --直接进入游戏

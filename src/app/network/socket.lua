@@ -1,7 +1,3 @@
---
--- Author: XiaoMing.Zhang
--- Date: 2014-02-13 12:56:23
---
 
 local SOCKET = class("SOCKET")
 local SocketTCP = require("network.SocketTCP")
@@ -29,6 +25,10 @@ function SOCKET:connect( host, port)
 		self.socket:addEventListener(SocketTCP.EVENT_DATA, handler(self,self.onData))
 	end
 	self.socket:connect()
+end
+
+function SOCKET:disconnect()
+	self.socket:disconnect()
 end
 
 --[[
